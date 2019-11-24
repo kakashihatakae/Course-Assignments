@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>1</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<h1>1</h1>
+
+<pre><code class="r">x = scan(&quot;http://pages.iu.edu/~mtrosset/StatInfeR/Data/sample774.dat&quot;)
+</code></pre>
+
+<h3>a)</h3>
+
+<pre><code class="r">x_ecdf &lt;- ecdf(x)
+plot(x_ecdf)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-2-1.png" alt="plot of chunk unnamed-chunk-2"></p>
+
+<h3>b)</h3>
+
+<pre><code class="r">x_mean &lt;- mean(x)
+x_var &lt;- var(x)
+x_mean
+</code></pre>
+
+<pre><code>## [1] 1.4876
+</code></pre>
+
+<pre><code class="r">x_var
+</code></pre>
+
+<pre><code>## [1] 2.934267
+</code></pre>
+
+<h3>c)</h3>
+
+<pre><code class="r">x_median &lt;- median(x)
+x_median
+</code></pre>
+
+<pre><code>## [1] 1.076
+</code></pre>
+
+<pre><code class="r">IQR &lt;- IQR(x)
+</code></pre>
+
+<h3>d)</h3>
+
+<pre><code class="r">x_IQR_to_sd &lt;- IQR/sqrt(x_var)
+</code></pre>
+
+<h3>e)</h3>
+
+<pre><code class="r">boxplot(x)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-6-1.png" alt="plot of chunk unnamed-chunk-6"></p>
+
+<h3>f)</h3>
+
+<pre><code class="r">qqnorm(x)
+qqline(x)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-7-1.png" alt="plot of chunk unnamed-chunk-7"></p>
+
+<h1>2</h1>
+
+<pre><code class="r">baseball_dat_AL &lt;- c(93, 87, 81, 80, 78, 95, 83, 81, 76, 74, 88, 86, 85, 76, 68)
+baseball_dat_NL &lt;- c(90, 83, 71, 67, 63, 100, 98, 97, 68, 64, 92, 84, 79, 74, 68)
+</code></pre>
+
+<h3>a)</h3>
+
+<pre><code class="r">final &lt;- cbind(baseball_dat_AL, baseball_dat_NL)
+
+boxplot(final)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-9-1.png" alt="plot of chunk unnamed-chunk-9"></p>
+
+<pre><code class="r">hist(final)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-9-2.png" alt="plot of chunk unnamed-chunk-9"></p>
+
+<pre><code class="r">par(mfrow=c(1,2))
+hist(baseball_dat_AL)
+hist(baseball_dat_NL)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-9-3.png" alt="plot of chunk unnamed-chunk-9"></p>
+
+<pre><code class="r">median(baseball_dat_AL)
+</code></pre>
+
+<pre><code>## [1] 81
+</code></pre>
+
+<pre><code class="r">median(baseball_dat_NL)
+</code></pre>
+
+<pre><code>## [1] 79
+</code></pre>
+
+<p>From the histograms it can be seen that the National league data has a bimodal distribution and american league has a unimodal distribution.</p>
+
+<pre><code class="r">par(mfrow=c(1,2))
+qqnorm(baseball_dat_AL, main=&#39;american league&#39;)
+qqline(baseball_dat_AL)
+
+qqnorm(baseball_dat_NL, main=&#39;national league&#39;)
+qqline(baseball_dat_NL)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-10-1.png" alt="plot of chunk unnamed-chunk-10">
+The QQ plots of both the data is shown above. American league data looks quite close to a normal distribution. All it&#39;s points lie close to a straight line.</p>
+
+<h1>3</h1>
+
+<h3>a)</h3>
+
+<pre><code class="r">data &lt;- scan(&quot;http://pages.iu.edu/~mtrosset/StatInfeR/Data/sample774.dat&quot;)
+data_ecdf &lt;- ecdf(data)
+plot(data_ecdf)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-11-1.png" alt="plot of chunk unnamed-chunk-11"></p>
+
+<h3>b)</h3>
+
+<pre><code class="r">data_mean &lt;- mean(data)
+data_var &lt;- var(data)
+data_median &lt;- media(data)
+</code></pre>
+
+<pre><code>## Error in media(data): could not find function &quot;media&quot;
+</code></pre>
+
+<pre><code class="r">IQR &lt;- IQR(data)
+</code></pre>
+
+<h3>c)</h3>
+
+<pre><code class="r">sqrt_var &lt;- sqrt(data_var)
+sqrt_var
+</code></pre>
+
+<pre><code>## [1] 1.71297
+</code></pre>
+
+<pre><code class="r">IQR
+</code></pre>
+
+<pre><code>## [1] 1.10775
+</code></pre>
+
+<pre><code class="r">normal_IQR &lt;- qnorm(0.75, m=data_mean, sd=sqrt_var) - qnorm(0.25, m=data_mean, sd=sqrt_var)
+</code></pre>
+
+<h3>d)</h3>
+
+<pre><code class="r">qqnorm(data)
+qqline(data)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-14-1.png" alt="plot of chunk unnamed-chunk-14">
+As seen in the Q-Q plot the data doesn&#39;t look like it&#39;s taken from a normally distributed data population. The data doesn&#39;t lie on a straight line on the QQ plot.</p>
+
+<h3>e)</h3>
+
+<pre><code class="r">data_y &lt;- log(x)
+par(mfrow=c(1,3))
+
+hist(data_y)
+plot(data_y)
+qqnorm(data_y)
+qqline(data_y)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-15-1.png" alt="plot of chunk unnamed-chunk-15">
+You can see  from the given Q-Q plot that the points don&#39;t lie along a straight line. Also the histogram looks a little skewed to the left. Thus the distribution is not 
+normally distributed.</p>
+
+<p>#4</p>
+
+<h3>a</h3>
+
+<pre><code class="r">data_5 &lt;- scan(&quot;http://pages.iu.edu/~mtrosset/StatInfeR/Data/test351.dat&quot;)
+
+qqnorm(data_5)
+qqline(data_5)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-16-1.png" alt="plot of chunk unnamed-chunk-16"></p>
+
+<pre><code class="r">hist(data_5)
+</code></pre>
+
+<p><img src="figure/unnamed-chunk-16-2.png" alt="plot of chunk unnamed-chunk-16"></p>
+
+</body>
+
+</html>
