@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 # CSCI B551 Fall 2019
 #
-# Authors: PLEASE PUT YOUR NAMES AND USERIDS HERE
+# Authors: Shreyas Bhujbal
 #
 # based on skeleton code by D. Crandall, 11/2019
 #
@@ -14,6 +14,8 @@ import math
 import copy 
 import sys
 import encode
+from random import randint
+import math
 
 def init_table():
     list_alpha = []
@@ -52,43 +54,145 @@ def cal_Wi(corp, letter1, letter2):
         for i in range(len(word) - 1):
             if word[i] == letter1 and word[i+1] == letter2:
                 numerator = numerator + 1
-            
+                # print(numerator)
             if word[i] == letter1 :
                 denominator = denominator + 1
+                # print(denominator)
+    if denominator == 0:
+        print('Wi: letter1: ', letter1, 'letter2: ', letter2, ' ', denominator)
+        return 0
+
     print('Wi: letter1: ', letter1, 'letter2: ', letter2, ' ', numerator/denominator)
     return numerator/denominator
 
-
-def decode(text, table):
-    empty_list = []
-    for word in text:
-        empty_str = ''
-        for letter in word:
-            empty_str = empty_str + table[letter]
-        empty_list.append(empty_str)
-    
-    return empty_list
+def cal_all_probs(corpus):
+    probs = {}
+    print('calculating probability')
+    for i in range(97, 123):
+        for j in range(97, 123):
+            probs[chr(i) + chr(j)] = cal_Wi(corpus, chr(i), chr(j))
+    for k in range(97,123):
+        probs[chr(k)] = cal_W0(corpus, chr(k))
+    return probs
         
+def change_config(table, rearrange_tab):
+    
+    flag = random.randint(0,1) 
+    temp = ''
+    tmp = {}
+    if flag:
+        ind = random.randint(0,2)
+        tmp = rearrange_tab[ind]
+        rearrange_tab[ind] = rearrange_tab[ind+1]
+        rearrange_tab[ind+1] = tmp
+    else:
+        rn = random.randint(97, 121)
+        temp = table[chr(rn)]
+        table[chr(rn)] = table[chr(rn+1)]
+        table[chr(rn+1)] = temp
+    return [table, rearrange_tab]
 
 # put your code here!
 def break_code(string, corpus):
+    # use encode function, change either table or rearrange list
+    
+    rearrange_tab = [0,1,2,3]
+    random.shuffle(rearrange_tab)
     table = init_table()
     
+    counter = 0
+    flag = 0
     text = string.split()
     corp = corpus.split()
-    p = 1
-    new_text = decode(text, table)
+    p = 0
+    x = 0
+    p_prev = float('-Inf')
+    table_prev = {}
+    rearrange_tab_prev = []
+    probs = cal_all_probs(corp)
+    break_flag = 0
     
-    for word in new_text:
-        if len(word) == 1:
-            p = p*cal_W0(corp, word)
-        else:
-            for i in range(len(word)):
-                if(not i):
-                    p = p*cal_W0(corp, word[0])
-                else:
-                    p = p*cal_Wi(corp, word[i-1], word[i])
-    return p
+    while(counter < 100000):
+        counter = counter + 1
+        print('***************************** ',counter)
+        new_text = encode.encode(string, table, rearrange_tab)
+        
+        # if p>math.log10(1+0.5) and p != float('Inf'):
+        #     return new_text
+        
+        if(counter > 39998):
+            return new_text
+        
+        new_text = new_text.split()
+        p = 0
+        for word in new_text:
+            if len(word) == 1:
+                # print(probs[word])
+                if probs[word]:
+                    x = probs[word]
+                    p = p + math.log10(x)
+                # else:
+                #     p = p+0
+                #     table, rearrange_tab = change_config(table, rearrange_tab)
+                #     break
+                    
+            else:
+                for i in range(len(word)):
+                    if(not i):
+                        # print(probs[word[0]])
+                        if probs[word[0]]:
+                            x = probs[word[0]]
+                            p = p + math.log10(x)
+
+                        # else:
+                        #     p = p+0
+                            # break_flag = 1
+                            # break
+                    
+                    else:
+                        # print(probs[word[i-1]+word[i]])
+                        if probs[word[i-1]+word[i]]:
+                            x = probs[word[i-1]+word[i]]
+                            p = p + math.log10(1+x)
+                        # else:
+                        #     p = p + 0
+                            # break_flag = 1
+                        #     break
+
+            # if p == float('Inf') or break_flag == 1:
+            #     table, rearrange_tab = change_config(table, rearrange_tab)
+            #     break_flag = 0
+            #     # print('==================================')
+            #     # print('break')
+            #     # print('==================================')
+            #     break
+
+
+
+        if p > p_prev:
+            print('---------')
+            print('probab: ', p, 'pprev: ', p_prev)
+            print('---------')
+
+            print('******** Improved ************')
+            table_prev = table
+            rearrange_tab_prev = rearrange_tab
+            p_prev = p
+            table, rearrange_tab = change_config(table, rearrange_tab)
+
+        
+        if p < p_prev:
+            print('---------')
+            print('probab: ', p, 'pprev: ', p_prev)
+            print('---------')
+            
+            print('******** Not Improved ************')
+            table = table_prev
+            rearrange_tab = rearrange_tab_prev
+            p = p_prev
+            table, rearrange_tab = change_config(table, rearrange_tab)
+
+
 
 
 if __name__== "__main__":
