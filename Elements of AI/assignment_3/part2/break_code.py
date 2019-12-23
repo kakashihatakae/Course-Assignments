@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 # CSCI B551 Fall 2019
 #
-# Authors: PLEASE PUT YOUR NAMES AND USERIDS HERE
+# Authors: Shreyas Bhujbal
 #
 # based on skeleton code by D. Crandall, 11/2019
 #
