@@ -16,6 +16,7 @@ import sys
 import encode
 from random import randint
 import math
+import numpy as np
 
 def init_table():
     list_alpha = []
@@ -24,15 +25,16 @@ def init_table():
     for i in range(97, 123):
         list_alpha.append(chr(i))
     # print(list_alpha)
-    random.seed(10)
-    random.shuffle(list_alpha)
+    
+    # random.seed(10)
+    # random.shuffle(list_alpha)
     
     # print(list_alpha)
     
     for i in range(97, 123):
         character = chr(i)
         table[character] = list_alpha[i-97]
-    # print(table)
+    print(table)
     print('init_done')
     return table
 
@@ -98,8 +100,7 @@ def break_code(string, corpus):
     
     rearrange_tab = [0,1,2,3]
     random.shuffle(rearrange_tab)
-    table = init_table()
-    
+    table = init_table()    
     counter = 0
     flag = 0
     text = string.split()
@@ -114,13 +115,13 @@ def break_code(string, corpus):
     
     while(counter < 100000):
         counter = counter + 1
-        print('***************************** ',counter)
+        # print(counter)
         new_text = encode.encode(string, table, rearrange_tab)
         
         # if p>math.log10(1+0.5) and p != float('Inf'):
         #     return new_text
         
-        if(counter > 39998):
+        if(counter > 79998):
             return new_text
         
         new_text = new_text.split()
@@ -171,26 +172,36 @@ def break_code(string, corpus):
 
         if p > p_prev:
             print('---------')
-            print('probab: ', p, 'pprev: ', p_prev)
+            print('probab: ', p, 'pprev: ', p_prev, 'counter ', counter)
             print('---------')
 
             print('******** Improved ************')
             table_prev = table
             rearrange_tab_prev = rearrange_tab
             p_prev = p
-            table, rearrange_tab = change_config(table, rearrange_tab)
+            table, rearrange_tab = change_config(table_prev, rearrange_tab_prev)
 
         
-        if p < p_prev:
-            print('---------')
-            print('probab: ', p, 'pprev: ', p_prev)
-            print('---------')
-            
-            print('******** Not Improved ************')
-            table = table_prev
-            rearrange_tab = rearrange_tab_prev
-            p = p_prev
-            table, rearrange_tab = change_config(table, rearrange_tab)
+        # if p < p_prev:
+        #     print('---------')
+        #     print('probab: ', p, 'pprev: ', p_prev)
+        #     print('---------')
+        #     sc = np.exp(p_prev - p)
+        #     print('******** Not Improved ************')
+        #     table = table_prev
+        #     rearrange_tab = rearrange_tab_prev
+        #     p = p_prev
+        #     table, rearrange_tab = change_config(table, rearrange_tab)
+        
+        sc = np.exp(p - p_prev)
+        prob = sc if sc <= 1 else 1
+        print(sc)
+        if prob > random.uniform(0,1):
+            print(p)
+            table_prev = table
+            rearrange_tab_prev = rearrange_tab
+            p_prev = p    
+        table, rearrange_tab = change_config(table_prev, rearrange_tab_prev)
 
 
 

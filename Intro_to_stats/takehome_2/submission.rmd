@@ -1,0 +1,77 @@
+---
+title: "Take home exam"
+---
+
+# 1
+
+- H0 : number of misprints follow poisson
+- H1 : number of misprints do not follow poisson
+
+```{r}
+num_mis_print <- c(0:10)
+news_pages <- c(9, 23, 40, 30, 31, 26, 19, 10, 5, 4, 3)
+
+mis_print_total <- sum(num_mis_print*news_pages)
+news_pages_total <- sum(news_pages)
+ave <- mis_print_total/news_pages_total
+
+cats <- news_pages_total*dpois(0:20, ave)
+data.frame(0:20, expected=round(cats, 1))
+
+expected <- rep(0, 9)
+expected[1:8] <- news_pages_total*dpois(0:7, ave)
+expected[9] <- news_pages_total*(1 - ppois(7, ave))
+observed <- c(9, 23, 40, 30, 31, 26, 19, 10, 12)
+
+statsL <- 2*sum(observed*log(observed/expected))
+statsL
+1 - pchisq(statsL, df=7)
+
+statsX  <- sum((observed-expected)^2/expected)
+statsX
+1 - pchisq(statsX, df=7)
+```
+
+If we consider the log likelihood, the calculated probability is more than
+the alpha value. Thus, we fail to reject the null hypothesis. The data is consistent 
+with the null hypothesis and the number of misprtints do follow a poisson distribution.
+
+
+If we consider the other test, the calculated probability is less than
+the alpha value. Thus, we  reject the null hypothesis. The data is not consistent 
+with the null hypothesis and the number of misprtints don't follow a poisson distribution.
+
+# 2
+
+## a
+
+```{r}
+exam <- read.table('examanxiety.txt', header=TRUE)
+
+X <- exam$Anxiety
+Y <- exam$Exam
+
+corelation <- cor(X,Y)
+sy <- sd(Y)
+sx <- sd(X)
+
+b <- corelation*(sy/sx)
+a <- mean(Y) - b*mean(X)
+
+pred_Y <- a + b*(X)
+pred_Y
+
+plot(X,Y)
+abline(a,b, col='red')
+```
+
+## b
+
+We assumed that the given varialbles have a linear relationship.
+We want to predict the exam score according to the anxiety. 
+
+- The Slope is basically the value of increase in exam score for unit increase in anxiety.
+- Here the the exam score decreases by around -0.73 for unit increase in anxiety.
+- On the other hand the 'a' value is the exam score if the particular candidate has 
+zero anxiety. 
+- Here the intercept value is around 111.244. The exam score is out of 100 not 111, but I don't think there's anyone who will have zero anxiety!!
